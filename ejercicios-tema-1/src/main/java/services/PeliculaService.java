@@ -16,20 +16,14 @@ public class PeliculaService extends Service {
 
 	}
 
-	public List<Pelicula> findShortFilms() {
-		// 1. Abrir conexión
+	public List<Pelicula> findShortFilms() throws PeliculaException {
 		try (Connection conn = abrirConexionSakilaCentral()) {
-			// 2. Invocar el método findAll del dao --> dao.findAll(conn)
-			dao.findAll(conn);
-			
-			
+			return dao.findAll(conn).stream().filter(p -> p.getLongitud() < 100).toList();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
+			throw new PeliculaException("Error colsuntando películas", e);
 		}
 
-		// 3. Con la lista que me devuelve el anterior --> Filtrar películas
-		// 4. Devolver la lista filtrada
-		// 5. Capturar excepciones y lanzar las que se consideren
-		return null;
 	}
 }
