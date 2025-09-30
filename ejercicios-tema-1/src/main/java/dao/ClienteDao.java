@@ -12,7 +12,7 @@ import model.Cliente;
 public class ClienteDao {
 
 	public List<Cliente> findAll(Connection conn) throws SQLException {
-		List<Cliente> result = new ArrayList<>();
+		List<Cliente> clientes = new ArrayList<>();
 		String sql = "select * from customer";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		ResultSet rs = stmt.executeQuery();
@@ -23,8 +23,8 @@ public class ClienteDao {
 			c.setLastName(rs.getString("last_name"));
 			c.setMail(rs.getString("email"));
 			c.setActivo(rs.getBoolean("active"));
-			result.add(c);
+			clientes.add(c);
 		}
-		return result;
+		return clientes;
 	}
 }

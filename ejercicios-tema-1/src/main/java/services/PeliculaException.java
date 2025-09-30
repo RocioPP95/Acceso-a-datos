@@ -2,6 +2,11 @@ package services;
 
 public class PeliculaException extends Exception {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7770121887707817797L;
+
 	public PeliculaException() {
 	}
 

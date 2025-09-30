@@ -2,6 +2,11 @@ package services;
 
 public class ClienteException extends Exception {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8664568820401279770L;
+
 	public ClienteException() {
 	}
 
