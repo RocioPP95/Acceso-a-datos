@@ -1,11 +1,11 @@
-package services;
+package service;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-
 import java.sql.SQLException;
 
 public abstract class Service {
+
 	public Connection abrirConexionSakila() throws SQLException {
 		String url = "jdbc:mariadb://localhost:3306/sakila";
 		String user = "sakila";
@@ -23,4 +23,5 @@ public abstract class Service {
 		}
 		return DriverManager.getConnection(url, user, pass);
 	}
+
 }

@@ -17,7 +17,7 @@ public class PeliculaService extends Service {
 	}
 
 	public List<Pelicula> findShortFilms() throws PeliculaException {
-		try (Connection conn = abrirConexionSakilaCentral()) {
+		try (Connection conn = abrirConexionSakila()) {
 			return dao.findAll(conn).stream().filter(p -> p.getLongitud() < 100).toList();
 
 		} catch (SQLException e) {

@@ -18,7 +18,7 @@ public class ClienteService extends Service {
 	}
 
 	public Map<String, Cliente> consultarCLientes() throws ClienteException {
-		try (Connection conn = abrirConexionSakilaCentral()) {
+		try (Connection conn = abrirConexionSakila()) {
 			List<Cliente> lista = dao.findAll(conn);
 			return lista.stream().collect(Collectors.toMap(c -> c.getMail(), c -> c));
 
