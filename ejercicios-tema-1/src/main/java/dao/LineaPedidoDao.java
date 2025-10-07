@@ -14,7 +14,7 @@ public class LineaPedidoDao {
 			stmt.setInt(2, linea.getNumLiena());
 			stmt.setString(3, linea.getArticulo());
 			stmt.setBigDecimal(4, linea.getPrecio());
-			stmt.executeUpdate();
+			stmt.execute();
 		}
 	}
 }

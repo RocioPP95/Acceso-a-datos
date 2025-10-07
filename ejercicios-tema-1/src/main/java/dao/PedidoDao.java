@@ -11,7 +11,7 @@ import model.Pedido;
 
 public class PedidoDao {
 	public Integer insertarPedido(Connection conn, Pedido pedido) throws SQLException {
-		String sql = "insert into pedidos ( fecha_pedido, fecha_entrega, cliente) VALUES (?, ?, ?, ?)";
+		String sql = "insert into pedidos ( fecha_pedido, fecha_entrega, cliente) VALUES (?, ?, ?)";
 		try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 			stmt.setDate(1, Date.valueOf(pedido.getFechaPedido()));
 			stmt.setDate(2, Date.valueOf(pedido.getFechaEntrega()));
