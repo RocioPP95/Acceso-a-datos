@@ -37,7 +37,8 @@ public class UserDao {
 		user.setUsername(rs.getString("username"));
 		user.setPassword(rs.getString("password"));
 		user.setCreatedDate(rs.getDate("fecha_alta").toLocalDate());
-		user.setLastLoginDate(rs.getDate("fecha_ult_login").toLocalDate());
+		user.setLastLoginDate(
+				rs.getDate("fecha_ult_login") == null ? null : rs.getDate("fecha_ult_login").toLocalDate());
 		return user;
 	}
 
@@ -126,9 +127,10 @@ public class UserDao {
 
 		stmt.setString(1, user.getUsername());
 		stmt.setString(2, user.getPassword());
-		stmt.setDate(3, Date.valueOf(user.getCreatedDate()));
-		stmt.setDate(4, Date.valueOf(user.getLastLoginDate()));
-		stmt.setLong(5, user.getId());
+		stmt.setString(3, user.getEmail());
+		stmt.setDate(4, Date.valueOf(user.getCreatedDate()));
+		stmt.setDate(5, Date.valueOf(user.getLastLoginDate()));
+		stmt.setLong(6, user.getId());
 
 		Integer numeroActualizados = stmt.executeUpdate();
 		return numeroActualizados;
