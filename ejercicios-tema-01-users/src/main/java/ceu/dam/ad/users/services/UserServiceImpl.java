@@ -14,6 +14,12 @@ import ceu.dam.ad.users.model.User;
 public class UserServiceImpl extends Service implements UserService {
 	private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
+	private UserDao dao;
+
+	public UserServiceImpl() {
+		dao = new UserDao();
+	}
+
 	/**
 	 * Recibe un usuario que trae indicado su username, email y password (sin
 	 * cifrar). El servicio tendrá que: 1. Verificar que no existe usuario con ese
@@ -26,7 +32,7 @@ public class UserServiceImpl extends Service implements UserService {
 	@Override
 	public User createUser(User user) throws DuplicateUserException, UserException {
 		log.debug("Creando nuevo usuario: " + user);
-		UserDao dao = new UserDao();
+		dao = new UserDao();
 
 		try (Connection conn = abrirConexionSakila()) {
 
@@ -62,7 +68,7 @@ public class UserServiceImpl extends Service implements UserService {
 	@Override
 	public void changePassword(Long idUser, String oldPassword, String newPassword)
 			throws UserNotFoundException, UserUnauthorizedException, UserException {
-		UserDao dao = new UserDao();
+		dao = new UserDao();
 		try (Connection conn = abrirConexionSakila()) {
 			User user = dao.getById(conn, idUser);
 			if (user == null) {
@@ -111,7 +117,34 @@ public class UserServiceImpl extends Service implements UserService {
 	public User login(String login, String password)
 			throws UserNotFoundException, UserUnauthorizedException, UserException {
 
-		return null;
+		log.debug("Realizando login con usuario " + login);
+		try (Connection conn = abrirConexionSakila()) {
+			User user = dao.getByUserName(conn, login);
+			if (user == null) {
+				user = dao.getByEmail(conn, login);
+				if (user == null) {
+					throw new UserNotFoundException("No existe el usuario indicado");
+				}
+			}
+			String passwordCifrada = DigestUtils.sha3_256Hex(password);
+			if (!passwordCifrada.equals(user.getPassword())) {
+				throw new UserUnauthorizedException("Password incorrecta");
+			}
+			try {
+				user.setLastLoginDate(LocalDate.now());
+				Integer updates = dao.update(conn, user);
+				if (updates == 0) {
+					log.error("Error actualizando fecha último login");
+				}
+			} catch (Exception e) {
+				log.error("Error actualizando fecha último login", e);
+			}
+			return user;
+
+		} catch (SQLException e) {
+			log.error("Error haciendo login", e);
+			throw new UserException("Error haciendo login", e);
+		}
 
 	}
 
@@ -124,7 +157,19 @@ public class UserServiceImpl extends Service implements UserService {
 
 	@Override
 	public User getUser(Long idUser) throws UserNotFoundException, UserException {
-		return null;
+		log.debug("Consultando usuario con id " + idUser);
+		try (Connection conn = abrirConexionSakila()) {
+			User user = dao.getById(conn, idUser);
+			if (user == null) {
+				log.warn("No existe usuario con el ID indicado");
+				throw new UserNotFoundException("No existe usuario con el ID indicado");
+			}
+			return user;
+
+		} catch (SQLException e) {
+			log.error("Error consultando usuario", e);
+			throw new UserException("Error consultando usuario", e);
+		}
 	}
 
 }

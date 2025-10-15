@@ -18,9 +18,12 @@ public class testPost {
 			nueva.setNombre("lalalal");
 			nueva.setPaisOrigen("jajaja");
 
+			//Se convierte el objeto Java a JSON usando la librería Gson. 
+			//Este JSON será el cuerpo de la solicitud HTTP POST.
 			String json = new Gson().toJson(nueva);
 			System.out.println("Request bosy: " + json);
 
+			
 			URI url = new URI("https://crudcrud.com/api/07abfc3271f74cc194793be6baafdfc8/videojuegos");
 			HttpClient client = HttpClient.newHttpClient();
 			HttpRequest request = HttpRequest.newBuilder(url).header("Content-Type", "application/json")
