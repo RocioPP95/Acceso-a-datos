@@ -56,6 +56,7 @@ public class VideojuegoApiClientImpl implements VideojuegoApiClient {
 			System.out.println(respuesta.body());
 			List<Videojuego> videojuegos = Arrays.asList(new Gson().fromJson(respuesta.body(), Videojuego[].class));
 			if (videojuegos.isEmpty()) {
+
 				throw new NotFoundException("No se encontró videojuego con este id");
 			}
 			return videojuegos.get(0);
@@ -117,7 +118,7 @@ public class VideojuegoApiClientImpl implements VideojuegoApiClient {
 		Videojuego creado = null;
 		try {
 			String json = new Gson().toJson(videojuego);
-			System.out.println("Request bosy: " + json);
+			// System.out.println("Request bosy: " + json);
 
 			URI url = new URI("https://crudcrud.com/api/0edc26ae00ac43088906ca7e436db4c0/videojuegos");
 
@@ -148,6 +149,33 @@ public class VideojuegoApiClientImpl implements VideojuegoApiClient {
 	 */
 	@Override
 	public void update(Videojuego videojuego) throws NotFoundException, ApiException {
+
+		try {
+
+			Videojuego copia = new Videojuego();
+			copia.setNombre(videojuego.getNombre());
+			copia.setValoracion(videojuego.getValoracion());
+			copia.setAñoPublicacion(videojuego.getAñoPublicacion());
+			copia.setPaisOrigen(videojuego.getPaisOrigen());
+
+			Gson gson = new Gson();
+			String json = gson.toJson(copia);
+
+			URI url = URI.create(urlBase + "/" + videojuego.getId());
+			HttpRequest request = HttpRequest.newBuilder(url).header("Content-Type", "application/json")
+					.PUT(BodyPublishers.ofString(json)).build();
+
+			HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
+
+			if (response.statusCode() == 404) {
+				throw new NotFoundException("No existe videojuego con  ese id ");
+			}
+
+		} catch (NotFoundException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ApiException("Error al actualizar videojuego", e);
+		}
 	}
 
 	/**
@@ -161,6 +189,22 @@ public class VideojuegoApiClientImpl implements VideojuegoApiClient {
 	 */
 	@Override
 	public void delete(String id) throws NotFoundException, ApiException {
+		try {
+			URI url = URI.create(urlBase + "/" + id);
+			HttpRequest request = HttpRequest.newBuilder(url).DELETE().build();
+
+			HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
+
+			// Si la API devuelve 404, significa que no existe el recurso
+			if (response.statusCode() == 404) {
+				throw new NotFoundException("No existe videojuego conese id");
+			}
+
+		} catch (NotFoundException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ApiException("Error al borrar videojuego", e);
+		}
 	}
 
 }
