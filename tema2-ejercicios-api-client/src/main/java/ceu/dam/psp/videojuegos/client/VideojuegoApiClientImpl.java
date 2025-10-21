@@ -26,13 +26,11 @@ public class VideojuegoApiClientImpl implements VideojuegoApiClient {
 	// Este atributo contendrá la
 	// URL base a la que hacer
 	// las peticiones
-	private HttpClient client;
 
 	public VideojuegoApiClientImpl(String uuidUrl) {
 		// El constructor recibe el identificador que ha generado crudcrud.com para
 		// nuestro API y construye la URL base
-		urlBase = "https://crudcrud.com/api/" + uuidUrl + "/";
-		client = HttpClient.newHttpClient();
+		urlBase = "https://crudcrud.com/api/" + uuidUrl + "/videojuegos/";
 
 	}
 
@@ -48,18 +46,22 @@ public class VideojuegoApiClientImpl implements VideojuegoApiClient {
 	@Override
 	public Videojuego findById(String id) throws NotFoundException, ApiException {
 		try {
-			URI url = new URI(urlBase + "/" + id);
+			URI url = new URI(urlBase + id);
+			HttpClient client = HttpClient.newHttpClient();
 			HttpRequest request = HttpRequest.newBuilder(url).GET().build();
 
 			HttpResponse<String> respuesta = client.send(request, BodyHandlers.ofString());
-			System.out.println(respuesta.statusCode());
-			System.out.println(respuesta.body());
-			List<Videojuego> videojuegos = Arrays.asList(new Gson().fromJson(respuesta.body(), Videojuego[].class));
-			if (videojuegos.isEmpty()) {
+
+			if (respuesta.statusCode() == 404) {
 
 				throw new NotFoundException("No se encontró videojuego con este id");
 			}
-			return videojuegos.get(0);
+			Gson gson = new Gson();
+			Videojuego videojuego = gson.fromJson(respuesta.body(), Videojuego.class);
+			return videojuego;
+
+		} catch (NotFoundException e) {
+			throw e;
 		} catch (Exception e) {
 			throw new ApiException("Error en la api ", e);
 		}
@@ -79,25 +81,30 @@ public class VideojuegoApiClientImpl implements VideojuegoApiClient {
 	public List<Videojuego> findByAñoPublicacion(Integer año) throws NotFoundException, ApiException {
 		try {
 			URI url = new URI(urlBase);
-			HttpRequest request = HttpRequest.newBuilder(url).GET().build();
+			HttpClient client = HttpClient.newHttpClient();
 
+			HttpRequest request = HttpRequest.newBuilder(url).GET().build();
 			HttpResponse<String> respuesta = client.send(request, BodyHandlers.ofString());
-			System.out.println(respuesta.statusCode());
-			System.out.println(respuesta.body());
+
+			// as list pasar el array que te devuelve en lista
 			List<Videojuego> videojuegos = Arrays.asList(new Gson().fromJson(respuesta.body(), Videojuego[].class));
 			List<Videojuego> videojuegosFiltrados = new ArrayList<>();
+
+			if (videojuegos.isEmpty()) {
+				throw new NotFoundException("No se encontró videojuego con este año de publicación");
+			}
+
+			// videojuegos.stream().filter(v->v.getAñoPublicacion().equals(año));
+
 			for (Videojuego juego : videojuegos) {
 				if (año.equals(juego.getAñoPublicacion())) {
 					videojuegosFiltrados.add(juego);
 				}
 			}
-
 			if (videojuegos.isEmpty()) {
 				throw new NotFoundException("No se encontró videojuego con este año de publicación");
 			}
-			if (videojuegosFiltrados.isEmpty()) {
-				throw new NotFoundException("No se encontró videojuego con este año de publicación");
-			}
+
 			return videojuegosFiltrados;
 		} catch (Exception e) {
 			throw new ApiException("Error en la api ", e);
@@ -115,27 +122,23 @@ public class VideojuegoApiClientImpl implements VideojuegoApiClient {
 	 */
 	@Override
 	public String create(Videojuego videojuego) throws ApiException {
-		Videojuego creado = null;
 		try {
-			String json = new Gson().toJson(videojuego);
-			// System.out.println("Request bosy: " + json);
-
-			URI url = new URI("https://crudcrud.com/api/0edc26ae00ac43088906ca7e436db4c0/videojuegos");
-
+			URI url = URI.create(urlBase);
 			HttpClient client = HttpClient.newHttpClient();
+
+			Gson gson = new Gson();
+			String json = gson.toJson(videojuego);
+
 			HttpRequest request = HttpRequest.newBuilder(url).header("Content-Type", "application/json")
 					.POST(BodyPublishers.ofString(json)).build();
 
 			HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
-			System.out.println(response.statusCode());
-			System.out.println(response.body());
-			creado = new Gson().fromJson(response.body(), Videojuego.class);
+			Videojuego videojuegoCreado = gson.fromJson(response.body(), Videojuego.class);
+			return videojuegoCreado.get_id();
 
 		} catch (Exception e) {
-			e.printStackTrace();
-
+			throw new ApiException("Error al conectar con la API", e);
 		}
-		return creado.getId();
 	}
 
 	/**
@@ -151,17 +154,13 @@ public class VideojuegoApiClientImpl implements VideojuegoApiClient {
 	public void update(Videojuego videojuego) throws NotFoundException, ApiException {
 
 		try {
+			URI url = URI.create(urlBase + videojuego.get_id());
+			HttpClient client = HttpClient.newHttpClient();
 
-			Videojuego copia = new Videojuego();
-			copia.setNombre(videojuego.getNombre());
-			copia.setValoracion(videojuego.getValoracion());
-			copia.setAñoPublicacion(videojuego.getAñoPublicacion());
-			copia.setPaisOrigen(videojuego.getPaisOrigen());
-
+			videojuego.set_id(null);
 			Gson gson = new Gson();
-			String json = gson.toJson(copia);
+			String json = gson.toJson(videojuego);
 
-			URI url = URI.create(urlBase + "/" + videojuego.getId());
 			HttpRequest request = HttpRequest.newBuilder(url).header("Content-Type", "application/json")
 					.PUT(BodyPublishers.ofString(json)).build();
 
@@ -190,8 +189,9 @@ public class VideojuegoApiClientImpl implements VideojuegoApiClient {
 	@Override
 	public void delete(String id) throws NotFoundException, ApiException {
 		try {
-			URI url = URI.create(urlBase + "/" + id);
+			URI url = URI.create(urlBase + id);
 			HttpRequest request = HttpRequest.newBuilder(url).DELETE().build();
+			HttpClient client = HttpClient.newHttpClient();
 
 			HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
 

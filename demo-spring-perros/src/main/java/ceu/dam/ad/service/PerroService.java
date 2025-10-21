@@ -8,9 +8,12 @@ import org.springframework.stereotype.Service;
 
 import ceu.dam.ad.model.Perro;
 import ceu.dam.ad.repository.perros.PerrosRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class PerroService {
+
+	// para decirle a spring que un atributo me loinstancie automaticamente
 	@Autowired
 	private PerrosRepository repo;
 
@@ -21,7 +24,15 @@ public class PerroService {
 		return perro;
 	}
 
+	// esto es para que si hay algun error no cree nada
+	@Transactional
+	public void crearPerros(List<Perro> perros) {
+		// perros.forEach(p -> repo.save(p));
+		repo.saveAll(perros); // no hace falta poner transactional
+	}
+
 	public Perro consultarPerro(Long id) throws NotFoundException {
+		//
 		Optional<Perro> optionalPerro = repo.findById(id);
 
 		if (optionalPerro.isPresent()) {
@@ -30,8 +41,11 @@ public class PerroService {
 		}
 		throw new NotFoundException("No existe perro");
 	}
-//	public List<Perro>buscarPerrosPorNombre(String filtroNombre){
-//		repo.findByPeroneContains("");
-//	}
+
+	List<Perro> findByPeroneAndRaza(String nombre, String raza) {
+		return repo.findByPeroneAndRaza(nombre, raza);
+	}
+
+	
 
 }
