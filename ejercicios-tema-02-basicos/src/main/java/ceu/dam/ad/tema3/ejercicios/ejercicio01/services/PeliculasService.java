@@ -1,45 +1,39 @@
 package ceu.dam.ad.tema3.ejercicios.ejercicio01.services;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.stereotype.Service;
 
 import ceu.dam.ad.tema3.ejercicios.ejercicio01.model.Pelicula;
-import ceu.dam.ad.tema3.ejercicios.ejercicio01.repository.PeliculasDao;
+import ceu.dam.ad.tema3.ejercicios.ejercicio01.repository.PeliculaRepository;
 
+@Service
 public class PeliculasService {
 
-	private static final Logger log = LoggerFactory.getLogger(PeliculasService.class);
-	
-	private PeliculasDao dao;
-	
-	public PeliculasService() {
-		dao = new PeliculasDao();
-	}
-	
-	
-	public List<Pelicula> consultarPeliculas() throws PeliculasException {
-		return consultarPeliculas(100);
-	}
+	@Autowired
+	private PeliculaRepository repo;
 
-	public List<Pelicula> consultarPeliculas(Integer longitud) throws PeliculasException {
-		try (Connection conn = null){
-			return dao.consultarPeliculas(conn)
-					.stream()
-					.filter(p -> p.getLongitud() < longitud)
-					.toList();
-		} 
-		catch (SQLException e) {
-			System.err.println("Error al consultar peliculas");
-			throw new PeliculasException("Error al consultar peliculas en BBDD", e);
+	public List<Pelicula> consultarPeliculaCorta(Integer id) throws PeliculasException {
+		try {
+			return repo.findAll().stream().filter(p -> p.getLongitud() < 100).toList();
+		} catch (DataAccessException e) {
+			System.err.println("Error alconsultar pelicula");
+			throw new PeliculasException();
 
 		}
 
 	}
 
+	public List<Pelicula> consultarPeliculas(Integer id) throws PeliculasException {
+		try {
+			return repo.findAll();
+		} catch (DataAccessException e) {
+			System.err.println("Error alconsultar pelicula");
+			throw new PeliculasException();
 
+		}
 
+	}
 }
