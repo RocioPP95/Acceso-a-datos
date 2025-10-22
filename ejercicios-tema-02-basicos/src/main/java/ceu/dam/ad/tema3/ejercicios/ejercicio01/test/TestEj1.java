@@ -14,7 +14,7 @@ import ceu.dam.ad.tema3.ejercicios.ejercicio01.services.PeliculasService;
 @Component
 public class TestEj1 {
 
-	private final PeliculaRepository peliculaRepository;
+	private PeliculaRepository peliculaRepository;
 	@Autowired
 	private PeliculasService service;
 
@@ -25,7 +25,13 @@ public class TestEj1 {
 	public void test() {
 
 		try {
-			List<Pelicula> peliculas = service.consultarPeliculaCorta(100);
+			List<Pelicula> peliculasCortas = service.consultarPeliculaCorta();
+			for (Pelicula pelicula : peliculasCortas) {
+				System.out.println(pelicula);
+			}
+
+			List<Pelicula> peliculas = service.consultarPeliculas();
+			
 			for (Pelicula pelicula : peliculas) {
 				System.out.println(pelicula);
 			}

@@ -56,6 +56,11 @@
 			<artifactId>commons-codec</artifactId>
 			<version>1.17.1</version>
 		</dependency>
+		<dependency>
+			<groupId>ceu.dam.ad</groupId>
+			<artifactId>ejercicios-tema-1</artifactId>
+			<version>0.0.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>

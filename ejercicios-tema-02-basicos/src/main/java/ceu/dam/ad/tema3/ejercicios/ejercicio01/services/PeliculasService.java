@@ -15,7 +15,7 @@ public class PeliculasService {
 	@Autowired
 	private PeliculaRepository repo;
 
-	public List<Pelicula> consultarPeliculaCorta(Integer id) throws PeliculasException {
+	public List<Pelicula> consultarPeliculaCorta() throws PeliculasException {
 		try {
 			return repo.findAll().stream().filter(p -> p.getLongitud() < 100).toList();
 		} catch (DataAccessException e) {
@@ -26,7 +26,7 @@ public class PeliculasService {
 
 	}
 
-	public List<Pelicula> consultarPeliculas(Integer id) throws PeliculasException {
+	public List<Pelicula> consultarPeliculas() throws PeliculasException {
 		try {
 			return repo.findAll();
 		} catch (DataAccessException e) {
