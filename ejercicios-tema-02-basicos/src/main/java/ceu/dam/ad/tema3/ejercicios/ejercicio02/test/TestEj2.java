@@ -17,7 +17,7 @@ public class TestEj2 {
 	@Autowired
 	private ClienteService service;
 
-	public void test(ClienteRepository clienteRepository) {
+	TestEj2(ClienteRepository clienteRepository) {
 		this.clienteRepository = clienteRepository;
 
 	}

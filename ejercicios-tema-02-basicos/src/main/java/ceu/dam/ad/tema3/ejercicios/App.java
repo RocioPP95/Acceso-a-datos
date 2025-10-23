@@ -6,6 +6,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import ceu.dam.ad.tema3.ejercicios.ejercicio01.test.TestEj1;
 import ceu.dam.ad.tema3.ejercicios.ejercicio02.test.TestEj2;
+import ceu.dam.ad.tema3.ejercicios.ejercicio03.test.TestEj3;
 
 @SpringBootApplication
 public class App {
@@ -18,6 +19,9 @@ public class App {
 
 		TestEj2 test2 = context.getBean(TestEj2.class);
 		test2.test();
+
+		TestEj3 test3 = context.getBean(TestEj3.class);
+		test3.test();
 
 	}
 

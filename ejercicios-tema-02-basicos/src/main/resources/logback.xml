@@ -22,7 +22,7 @@
 	
 	
 	<!-- Configuración de nivel global -->
-	<root level="DEBUG">
+	<root level="WARN">
 		<appender-ref ref="CONSOLE" />
 		<appender-ref ref="FILE" />
 	</root>
@@ -30,6 +30,7 @@
 	
 	<!-- Configuración específica para un paquete/clase -->
 	<logger name="org.mariadb" level="INFO" />
+	<logger name="ceu.dam" level="DEBUG" />
 	
 	
 </configuration>
