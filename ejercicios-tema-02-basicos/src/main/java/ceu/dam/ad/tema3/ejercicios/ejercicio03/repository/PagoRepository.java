@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import ceu.dam.ad.tema3.ejercicios.ejercicio03.model.Pago;
+import ceu.dam.ad.tema3.ejercicios.ejercicio04.modelo.Pedido;
 
 @Repository
 public interface PagoRepository extends JpaRepository<Pago, Integer> {
@@ -13,4 +14,8 @@ public interface PagoRepository extends JpaRepository<Pago, Integer> {
 
 
 	List<Pago> findAllByIdCliente(Integer id);
+
+	
+
+	
 }

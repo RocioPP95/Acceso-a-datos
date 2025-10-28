@@ -7,6 +7,8 @@ import java.util.List;
 import ceu.dam.ad.tema3.ejercicios.ejercicio03.model.Pago;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
@@ -18,6 +20,7 @@ public class Pedido {
 
 	@Id
 	@Column(name="id_pedido")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idPedido;
 	
 	private LocalDate fechaPedido;
