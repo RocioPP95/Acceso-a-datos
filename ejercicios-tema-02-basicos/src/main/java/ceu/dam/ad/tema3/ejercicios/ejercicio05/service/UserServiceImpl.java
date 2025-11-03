@@ -1,38 +1,40 @@
 package ceu.dam.ad.tema3.ejercicios.ejercicio05.service;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Optional;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.stereotype.Service;
 
 import ceu.dam.ad.tema3.ejercicios.ejercicio05.model.User;
-import ceu.dam.ad.tema3.ejercicios.ejercicio05.repository.UserDao;
+import ceu.dam.ad.tema3.ejercicios.ejercicio05.repository.UserRepository;
 
-public class UserServiceImpl  implements UserService {
+
+@Service
+public class UserServiceImpl implements UserService {
 
 	private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
-	private UserDao dao;
+	@Autowired
+	private UserRepository repository;
 
-	public UserServiceImpl() {
-		dao = new UserDao();
-	}
 
 	@Override
 	public User createUser(User user) throws DuplicateUserException, UserException {
 		log.debug("Creando nuevo usuario: " + user);
-		try (Connection conn = null) {
+		try {
 			// 1. Comprobar si existe usuario con ese email o username
-			User existsUser = dao.getByEmail(conn, user.getEmail());
-			if (existsUser != null) {
+			Optional<User> optUser = repository.findOneByEmail(user.getEmail());
+			if (optUser.isPresent()) {
 				log.debug("Usuario con email repetido");
 				throw new DuplicateUserException("Ya existe usuario con el email indicado");
 			}
-			existsUser = dao.getByUserName(conn, user.getEmail());
-			if (existsUser != null) {
+			optUser = repository.findOneByUsername(user.getUsername());
+			if (optUser.isPresent()) {
 				log.debug("Usuario con username repetido");
 				throw new DuplicateUserException("Ya existe usuario con el username indicado");
 			}
@@ -42,13 +44,10 @@ public class UserServiceImpl  implements UserService {
 			user.setCreatedDate(LocalDate.now());
 
 			// 3. Insertar usuario
-			Long id = dao.insert(conn, user);
-
-			// 4. Recoger id creado y devolver user completo
-			user.setId(id);
-			log.debug("Usuario creado con éxito con id " + id);
+			repository.save(user);
+			log.debug("Usuario creado con éxito con id " + user.getId());
 			return user;
-		} catch (SQLException e) {
+		} catch (DataAccessException e) {
 			log.error("Error creando usuario ", e);
 			throw new UserException("Error registrando usuario");
 		}
@@ -58,7 +57,7 @@ public class UserServiceImpl  implements UserService {
 	public void changePassword(Long idUser, String oldPassword, String newPassword)
 			throws UserNotFoundException, UserUnauthorizedException, UserException {
 		log.debug("Actualizacion password de usuario con id: " + idUser);
-		try (Connection conn = null) {
+		try {
 			// 0. Comprobar que password sean diferentes
 			if (newPassword.equals(oldPassword)) {
 				log.debug("Pass antigua igual a la nueva, no se hará el cambio ");
@@ -66,11 +65,7 @@ public class UserServiceImpl  implements UserService {
 			}
 
 			// 1. Comprobar si usuario existe
-			User user = dao.getById(conn, idUser);
-			if (user == null) {
-				log.warn("El usuario indicado no existe. ID " + idUser);
-				throw new UserNotFoundException("No existe usuario con id " + idUser);
-			}
+			User user = repository.findById(idUser).orElseThrow(()->new UserNotFoundException("No existe usuario con id " + idUser));
 			
 			// 2. Comprobamos password antigua
 			String passwordCipherOld = DigestUtils.sha256Hex(oldPassword);
@@ -81,10 +76,10 @@ public class UserServiceImpl  implements UserService {
 			
 			String passwordCipherNew = DigestUtils.sha256Hex(newPassword);
 			user.setPassword(passwordCipherNew);
-			dao.update(conn, user);
+			repository.save(user);
 			log.debug("Password cambiada con exito");
 			
-		} catch (SQLException e) {
+		} catch (DataAccessException e) {
 			log.error("Error actualizando pass de usuario ", e);
 			throw new UserException("Error actualizando usuario");
 		}
@@ -94,19 +89,20 @@ public class UserServiceImpl  implements UserService {
 	public User login(String login, String password)
 			throws UserNotFoundException, UserUnauthorizedException, UserException {
 		log.debug("Realizando login con usuario " + login);
-		try (Connection conn = null) {
+		try {
 			// 1. Comprobar si existe login como username o como email
 			log.debug("Intentando login por email...");
-			User user = dao.getByEmail(conn, login);
-			if (user == null) {
+			Optional<User> optUser = repository.findOneByEmail(login);
+			if (optUser.isEmpty()) {
 				log.debug("Intentando login por username...");
-				user = dao.getByUserName(conn, login);
+				optUser = repository.findOneByUsername(login);
 			}
-			if (user == null) {
+			if (optUser.isEmpty()) {
 				log.debug("No existe usuario (email o username)");
 				throw new UserNotFoundException("No existe usuario con el login indicado");
 			}
-			
+			User user = optUser.get();
+
 			// 2. Comprobar password cifrándola previamente
 			String passwordCipher = DigestUtils.sha256Hex(password);
 			if (!user.getPassword().equals(passwordCipher)) {
@@ -118,15 +114,15 @@ public class UserServiceImpl  implements UserService {
 			try {
 				log.debug("Actualizando fecha de último login");
 				user.setLastLoginDate(LocalDate.now());
-				dao.update(conn, user);
+				repository.save(user);
 			}
-			catch(SQLException e) {
+			catch(DataAccessException e) {
 				log.error("Error actualizando fecha último login del usuario ", e);
 			}
 			log.debug("Login correcto");
 			return user;
 			
-		}catch (SQLException e) {
+		}catch (DataAccessException e) {
 			log.error("Error actualizando pass de usuario ", e);
 			throw new UserException("Error actualizando usuario");
 		}
@@ -136,16 +132,16 @@ public class UserServiceImpl  implements UserService {
 	@Override
 	public User getUser(Long idUser) throws UserNotFoundException, UserException {
 		log.debug("Consultando usuario con id " + idUser);
-		try (Connection conn = null) {
-			User user = dao.getById(conn, idUser);
-			if (user == null) {
-				throw new UserNotFoundException("No existe usuario con el id indicado");
-			}
-			return user;
-		}catch (SQLException e) {
+		try {
+			return repository.findById(idUser).orElseThrow(()-> new UserNotFoundException("No existe usuario con el id indicado"));
+			// Alternativa:
+//			if (optUser.isEmpty()) {
+//				throw new UserNotFoundException("No existe usuario con el id indicado");
+//			}
+//			return optUser.get();
+		}catch (DataAccessException e) {
 			log.error("Error actualizando pass de usuario ", e);
 			throw new UserException("Error actualizando usuario");
 		}
 	}
-
 }
