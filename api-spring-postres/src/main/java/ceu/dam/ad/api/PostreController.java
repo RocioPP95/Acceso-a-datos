@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,18 +14,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ceu.dam.ad.ApiSpringPostresApplication;
+import ceu.dam.ad.dto.PostreRequest;
+import ceu.dam.ad.dto.PostreResponse;
 import ceu.dam.ad.model.Postre;
 
 @RestController
-@RequestMapping("/postre")
-public class PostreService {
-
-	private final ApiSpringPostresApplication apiSpringPostresApplication;
-
-	PostreService(ApiSpringPostresApplication apiSpringPostresApplication) {
-		this.apiSpringPostresApplication = apiSpringPostresApplication;
-	}
+@RequestMapping("/usuarios")
+public class PostreController {
+	
+	
 
 	@GetMapping("/{id}")
 	public Postre getById(@PathVariable Long id) {
@@ -34,9 +32,14 @@ public class PostreService {
 
 	@PostMapping("")
 
-	public Postre create(@RequestBody Postre postre) {
-		postre.setId(877L);
-		return postre;
+	public PostreResponse create(@RequestBody PostreRequest postreDto) {
+//Obtenemos entity desde RequestDto
+		Postre postreEntity = new ModelMapper().map(postreDto, Postre.class);
+		// Llamar al servivio para insertar pasando el entity
+		postreEntity.setId(744L);
+		// Obtenemos ResponseDto desde entity
+		return new ModelMapper().map(postreEntity, PostreResponse.class);
+
 	}
 
 	@GetMapping("")
