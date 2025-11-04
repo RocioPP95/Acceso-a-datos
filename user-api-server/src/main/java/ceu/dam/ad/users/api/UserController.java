@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ceu.dam.ad.users.dto.LoginRequestDto;
+import ceu.dam.ad.users.dto.PasswordChangeRequestDto;
 import ceu.dam.ad.users.dto.request.UserRequestDto;
 import ceu.dam.ad.users.dto.response.UserResponseDto;
 import ceu.dam.ad.users.exception.DuplicateUserException;
@@ -34,13 +36,25 @@ public class UserController {
 		return new ModelMapper().map(userEntity, UserResponseDto.class);
 
 	}
+	
 
 	@PutMapping("/{id}")
-	public UserResponseDto put(@PathVariable Long id, @RequestParam String oldPassword,
-			@RequestParam String newPassword) throws UserNotFoundException, UserUnauthorizedException, UserException {
-		service.changePassword(id, oldPassword, newPassword);
+	public void putPassword(@PathVariable Long id, @RequestBody PasswordChangeRequestDto passwordChangeDto)
+			throws UserNotFoundException, UserUnauthorizedException, UserException {
+		service.changePassword(id, passwordChangeDto.getOldPassword(), passwordChangeDto.getNewPassword());
 		System.out.println("Contraseña actualizada");
 
-		return null;
+	}
+//	@PostMapping("/login")    
+//	public User login(@RequestParam String login, @RequestParam String password)
+//	        throws UserNotFoundException, UserUnauthorizedException, UserException {
+//	    return service.login(login, password);
+//	}
+//	
+//	
+	@PostMapping("/login")
+	public User login(@RequestBody LoginRequestDto dto)
+	        throws UserNotFoundException, UserUnauthorizedException, UserException {
+	    return service.login(dto.getLogin(), dto.getPassword());
 	}
 }
