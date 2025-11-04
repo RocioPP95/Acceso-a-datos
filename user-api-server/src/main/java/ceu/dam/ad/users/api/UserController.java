@@ -36,7 +36,6 @@ public class UserController {
 		return new ModelMapper().map(userEntity, UserResponseDto.class);
 
 	}
-	
 
 	@PutMapping("/{id}")
 	public void putPassword(@PathVariable Long id, @RequestBody PasswordChangeRequestDto passwordChangeDto)
@@ -45,16 +44,17 @@ public class UserController {
 		System.out.println("Contraseña actualizada");
 
 	}
-//	@PostMapping("/login")    
+
+//	@PostMapping("")    
 //	public User login(@RequestParam String login, @RequestParam String password)
 //	        throws UserNotFoundException, UserUnauthorizedException, UserException {
 //	    return service.login(login, password);
 //	}
 //	
 //	
-	@PostMapping("/login")
+	@PostMapping("")
 	public User login(@RequestBody LoginRequestDto dto)
-	        throws UserNotFoundException, UserUnauthorizedException, UserException {
-	    return service.login(dto.getLogin(), dto.getPassword());
+			throws UserNotFoundException, UserUnauthorizedException, UserException {
+		return service.login(dto.getLogin(), dto.getPassword());
 	}
 }

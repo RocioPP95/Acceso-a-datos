@@ -19,13 +19,20 @@ public class Perro {
 	// este es poque el id se autogenra incrementado si no no se pone
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idPerro;
-
-	@Column(name = "nombre")
-	private String perone;
-
+	private String nombre;
 	private String raza;
-
-	@Transient
-	private String color;
+	private String numChip;
+	private Boolean vacunado;
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//private Persona propietario;
 
 }

@@ -12,7 +12,6 @@ import ceu.dam.ad.model.Perro;
 // siempre extiende de JpaRepository
 // perro es la entiti
 public interface PerrosRepository extends JpaRepository<Perro, Long> {
-	List<Perro> findByPeroneAndRaza(String nombre, String raza);
-	// Optional<Perro>findByNumChip(String numChip);
+	
 
 }
