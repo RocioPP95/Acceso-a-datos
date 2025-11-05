@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ceu.dam.ad.users.dto.LoginRequestDto;
@@ -57,4 +56,12 @@ public class UserController {
 			throws UserNotFoundException, UserUnauthorizedException, UserException {
 		return service.login(dto.getLogin(), dto.getPassword());
 	}
+
+	@PutMapping("/{id}")
+	public UserResponseDto get(@PathVariable Long id) throws UserNotFoundException, UserException {
+		User userEntity = service.getUser(id);
+		return new ModelMapper().map(userEntity, UserResponseDto.class);
+
+	}
+
 }

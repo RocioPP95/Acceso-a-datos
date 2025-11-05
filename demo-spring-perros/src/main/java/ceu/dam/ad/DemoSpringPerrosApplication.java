@@ -9,9 +9,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import ceu.dam.ad.model.Domicilio;
 import ceu.dam.ad.model.Perro;
 import ceu.dam.ad.model.Persona;
-import ceu.dam.ad.repository.perros.PerrosRepository;
-import ceu.dam.ad.repository.perros.PersonaRepository;
-import ceu.dam.ad.service.NotFoundException;
+
 import ceu.dam.ad.service.PerroService;
 
 @SpringBootApplication
