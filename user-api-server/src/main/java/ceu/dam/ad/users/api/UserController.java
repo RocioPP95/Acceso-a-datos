@@ -2,6 +2,7 @@ package ceu.dam.ad.users.api;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,9 +20,10 @@ import ceu.dam.ad.users.exception.UserNotFoundException;
 import ceu.dam.ad.users.exception.UserUnauthorizedException;
 import ceu.dam.ad.users.model.User;
 import ceu.dam.ad.users.service.UserServiceImpl;
+import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping
+@RequestMapping("/users")
 public class UserController {
 
 	@Autowired
@@ -36,8 +38,8 @@ public class UserController {
 
 	}
 
-	@PutMapping("/{id}")
-	public void putPassword(@PathVariable Long id, @RequestBody PasswordChangeRequestDto passwordChangeDto)
+	@PutMapping("/{id}/password")
+	public void putPassword(@Valid @PathVariable Long id, @RequestBody PasswordChangeRequestDto passwordChangeDto)
 			throws UserNotFoundException, UserUnauthorizedException, UserException {
 		service.changePassword(id, passwordChangeDto.getOldPassword(), passwordChangeDto.getNewPassword());
 		System.out.println("Contraseña actualizada");
@@ -51,13 +53,13 @@ public class UserController {
 //	}
 //	
 //	
-	@PostMapping("")
-	public User login(@RequestBody LoginRequestDto dto)
+	@PostMapping("/login")
+	public LoginResponseDto login(@RequestBody LoginRequestDto request)
 			throws UserNotFoundException, UserUnauthorizedException, UserException {
-		return service.login(dto.getLogin(), dto.getPassword());
-	}
+		User user = service.login(request.getLogin(), request.getPassword());
+		return new ModelMapper().map(user, LoginResponseDto.class);	}
 
-	@PutMapping("/{id}")
+	@GetMapping("/{id}")
 	public UserResponseDto get(@PathVariable Long id) throws UserNotFoundException, UserException {
 		User userEntity = service.getUser(id);
 		return new ModelMapper().map(userEntity, UserResponseDto.class);
