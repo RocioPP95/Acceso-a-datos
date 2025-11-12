@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import ceu.dam.ad.ejerciciosTema2.avanzado.ejercicio1.test.Test1;
+import ceu.dam.ad.ejerciciosTema2.avanzado.ejercicio2.test.Test2;
 
 @SpringBootApplication
 public class App {

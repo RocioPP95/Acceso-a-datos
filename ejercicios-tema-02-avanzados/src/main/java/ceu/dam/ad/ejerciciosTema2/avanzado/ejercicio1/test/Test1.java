@@ -11,23 +11,15 @@ import ceu.dam.ad.ejerciciosTema2.avanzado.ejercicio1.model.Episodio;
 import ceu.dam.ad.ejerciciosTema2.avanzado.ejercicio1.model.Serie;
 import ceu.dam.ad.ejerciciosTema2.avanzado.ejercicio1.model.Temporada;
 import ceu.dam.ad.ejerciciosTema2.avanzado.ejercicio1.model.Trailer;
-import ceu.dam.ad.ejerciciosTema2.avanzado.ejercicio1.repository.RepositorySerie;
 import ceu.dam.ad.ejerciciosTema2.avanzado.ejercicio1.service.SerieNotFoundException;
 import ceu.dam.ad.ejerciciosTema2.avanzado.ejercicio1.service.SeriesService;
 import ceu.dam.ad.ejerciciosTema2.avanzado.ejercicio1.service.SeriesServiceException;
-import ceu.dam.ad.ejerciciosTema2.avanzado.ejercicio1.service.SeriesServiceImpl;
 
 @Component
 
 public class Test1 {
-	private RepositorySerie serirRepository;
 	@Autowired
 	private SeriesService service;
-
-	Test1(RepositorySerie peliculaRepository) {
-		this.serirRepository = serirRepository;
-		service = new SeriesServiceImpl();
-	}
 
 	public void test() {
 		Serie serie = createTestSerie("Los lugares ocultos");
