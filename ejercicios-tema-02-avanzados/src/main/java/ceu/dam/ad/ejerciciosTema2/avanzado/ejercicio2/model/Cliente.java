@@ -9,16 +9,23 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Entity
 @Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Cliente {
 	@Id
 	private String dni;
 	private String nombre;
 	private String apellidos;
-	@OneToMany(fetch = FetchType.EAGER)
-	@JoinColumn(name = "dni_cliente", nullable = false)
+	 @OneToMany(mappedBy = "cliente", fetch = FetchType.EAGER)
+//	@OneToMany(fetch = FetchType.EAGER)
+//	@JoinColumn(name = "dni_cliente", nullable = false)
+	 @ToString.Exclude
 	private Set<Pedido> pedidos;
-
+	
+	
+	
 }

@@ -29,7 +29,7 @@ public class Test2 {
 //		DELETE FROM CLIENTE;
 //		DELETE FROM ARTICULO WHERE ID > 7;		
 
-		service = new PedidosClientesServiceImpl();
+
 		try {
 			// Test crear articulo
 			Articulo articuloNuevo = new Articulo();

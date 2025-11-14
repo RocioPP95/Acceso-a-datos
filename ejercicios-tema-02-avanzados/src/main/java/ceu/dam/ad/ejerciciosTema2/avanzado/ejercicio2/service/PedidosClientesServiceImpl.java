@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.stereotype.Service;
 
 import ceu.dam.ad.ejerciciosTema2.avanzado.ejercicio2.model.Articulo;
 import ceu.dam.ad.ejerciciosTema2.avanzado.ejercicio2.model.Cliente;
@@ -15,7 +16,7 @@ import ceu.dam.ad.ejerciciosTema2.avanzado.ejercicio2.repository.PedidoRepositor
 import ceu.dam.ad.ejerciciosTema2.avanzado.ejercicio2.repository.RepositoryArticulo;
 import ceu.dam.ad.ejerciciosTema2.avanzado.ejercicio2.repository.RepositoryPedidoLineas;
 import jakarta.transaction.Transactional;
-
+@Service
 public class PedidosClientesServiceImpl implements PedidosClientesService {
 
 	@Autowired
