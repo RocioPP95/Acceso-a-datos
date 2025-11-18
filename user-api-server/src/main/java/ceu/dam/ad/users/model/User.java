@@ -8,6 +8,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
@@ -18,19 +20,16 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
 	private String username;
+
+
 	private String email;
+
 	private String password;
 	@Column(name = "fecha_alta")
 	private LocalDate createdDate;
 	@Column(name = "fecha_ult_login")
 	private LocalDate lastLoginDate;
-	
-	
-	
-	
-	
-	
-	
 
 }

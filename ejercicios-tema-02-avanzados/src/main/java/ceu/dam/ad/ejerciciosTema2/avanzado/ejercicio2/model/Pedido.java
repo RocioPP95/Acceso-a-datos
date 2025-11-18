@@ -29,18 +29,15 @@ public class Pedido {
 	@Id
 	@GeneratedValue
 	@JdbcTypeCode(java.sql.Types.VARCHAR)
-	 @Column(name = "uuid_pedido")
+	@Column(name = "uuid_pedido")
+	@EqualsAndHashCode.Include
 	private UUID uidPedido;
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "dni_cliente")
-	 @ToString.Exclude
+	@JoinColumn(name = "dni_cliente",nullable=false)
 	private Cliente cliente;
 	private Date fecha;
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinColumn(name = "uuid_pedido", nullable = false)
+	@JoinColumn(name = "uuid_pedido", nullable = false)//nombre de fk de la base de datos
 	private List<PedidoLinea> lineas;
-	
 
-	
-	
 }

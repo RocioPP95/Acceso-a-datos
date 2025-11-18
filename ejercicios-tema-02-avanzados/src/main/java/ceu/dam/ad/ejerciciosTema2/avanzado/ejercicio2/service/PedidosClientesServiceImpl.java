@@ -16,6 +16,7 @@ import ceu.dam.ad.ejerciciosTema2.avanzado.ejercicio2.repository.PedidoRepositor
 import ceu.dam.ad.ejerciciosTema2.avanzado.ejercicio2.repository.RepositoryArticulo;
 import ceu.dam.ad.ejerciciosTema2.avanzado.ejercicio2.repository.RepositoryPedidoLineas;
 import jakarta.transaction.Transactional;
+
 @Service
 public class PedidosClientesServiceImpl implements PedidosClientesService {
 
@@ -51,10 +52,11 @@ public class PedidosClientesServiceImpl implements PedidosClientesService {
 	public Pedido crearPedido(Pedido pedido) throws PedidosClientesServiceException {
 
 		try {
-			Integer contador = 0;
+//meter aqui lo de compreobar 
+			Integer contador = 1;
 			List<PedidoLinea> lineas = pedido.getLineas();
 			for (PedidoLinea pedidoLinea : lineas) {
-				Integer suma=contador++;
+				Integer suma = contador++;
 				pedidoLinea.setNumLinea(suma);
 
 			}
@@ -73,7 +75,7 @@ public class PedidosClientesServiceImpl implements PedidosClientesService {
 	 */
 
 	@Override
-	@Transactional
+
 	public Articulo crearArticulo(Articulo articulo) throws PedidosClientesServiceException {
 		try {
 			articuloRepo.save(articulo);
@@ -89,9 +91,14 @@ public class PedidosClientesServiceImpl implements PedidosClientesService {
 	 * datos de esta entidad, no de sus pedidos.
 	 */
 	@Override
-	@Transactional
+	
 	public void actualizarCliente(Cliente cliente) throws PedidosClientesServiceException {
 		try {
+
+			if (clienteRepo.findById(cliente.getDni()).isEmpty()) {
+				throw new PedidosClientesServiceException("EL cliente no existe");
+			}
+
 			clienteRepo.save(cliente);
 
 		} catch (DataAccessException e) {

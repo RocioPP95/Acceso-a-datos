@@ -20,7 +20,7 @@ public class Cliente {
 	private String dni;
 	private String nombre;
 	private String apellidos;
-	 @OneToMany(mappedBy = "cliente", fetch = FetchType.EAGER)
+	 @OneToMany(mappedBy = "cliente", fetch = FetchType.EAGER)//el nombre del atributo de la tabla Pedido
 //	@OneToMany(fetch = FetchType.EAGER)
 //	@JoinColumn(name = "dni_cliente", nullable = false)
 	 @ToString.Exclude

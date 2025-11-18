@@ -27,7 +27,7 @@ public class PedidoLinea {
 	private Integer numLinea;
 	private Integer cantidad;
 	@ManyToOne                      
-    @JoinColumn(name = "id_articulo")
+    @JoinColumn(name = "id_articulo", nullable=false)
 	private Articulo articulo;
 
 }

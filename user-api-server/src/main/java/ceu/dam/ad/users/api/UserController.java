@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ceu.dam.ad.users.dto.LoginRequestDto;
-import ceu.dam.ad.users.dto.PasswordChangeRequestDto;
+import ceu.dam.ad.users.dto.request.LoginRequestDto;
+import ceu.dam.ad.users.dto.request.PasswordChangeRequestDto;
 import ceu.dam.ad.users.dto.request.UserRequestDto;
 import ceu.dam.ad.users.dto.response.UserResponseDto;
 import ceu.dam.ad.users.exception.DuplicateUserException;
@@ -31,7 +31,8 @@ public class UserController {
 
 	@PostMapping("")
 
-	public UserResponseDto post(@RequestBody UserRequestDto userDto) throws DuplicateUserException, UserException {
+	public UserResponseDto post(@Valid @RequestBody UserRequestDto userDto)
+			throws DuplicateUserException, UserException {
 		User userEntity = new ModelMapper().map(userDto, User.class);
 		service.createUser(userEntity);
 		return new ModelMapper().map(userEntity, UserResponseDto.class);
@@ -39,7 +40,7 @@ public class UserController {
 	}
 
 	@PutMapping("/{id}/password")
-	public void putPassword(@Valid @PathVariable Long id, @RequestBody PasswordChangeRequestDto passwordChangeDto)
+	public void putPassword(@PathVariable Long id, @Valid @RequestBody PasswordChangeRequestDto passwordChangeDto)
 			throws UserNotFoundException, UserUnauthorizedException, UserException {
 		service.changePassword(id, passwordChangeDto.getOldPassword(), passwordChangeDto.getNewPassword());
 		System.out.println("Contraseña actualizada");
@@ -54,10 +55,11 @@ public class UserController {
 //	
 //	
 	@PostMapping("/login")
-	public LoginResponseDto login(@RequestBody LoginRequestDto request)
+	public LoginResponseDto login(@Valid @RequestBody LoginRequestDto request)
 			throws UserNotFoundException, UserUnauthorizedException, UserException {
 		User user = service.login(request.getLogin(), request.getPassword());
-		return new ModelMapper().map(user, LoginResponseDto.class);	}
+		return new ModelMapper().map(user, LoginResponseDto.class);
+	}
 
 	@GetMapping("/{id}")
 	public UserResponseDto get(@PathVariable Long id) throws UserNotFoundException, UserException {
