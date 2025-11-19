@@ -4,8 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import ceu.dam.ad.ejerciciosTema2.avanzado.ejercicio2.test.Test2;
-
+import ceu.dam.ad.ejerciciosTema2.avanzado.ejercicio3.test.Test3;
 
 @SpringBootApplication
 public class App {
@@ -13,9 +12,8 @@ public class App {
 	public static void main(String[] args) {
 		ConfigurableApplicationContext context = SpringApplication.run(App.class, args);
 
-		Test2 test = context.getBean(Test2.class);
+		Test3 test = context.getBean(Test3.class);
 		test.test();
 	}
 
-} 
- 
+}

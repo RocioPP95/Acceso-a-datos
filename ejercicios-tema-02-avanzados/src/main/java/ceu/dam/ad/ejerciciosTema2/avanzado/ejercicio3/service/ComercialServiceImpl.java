@@ -2,6 +2,7 @@ package ceu.dam.ad.ejerciciosTema2.avanzado.ejercicio3.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -12,7 +13,9 @@ import ceu.dam.ad.ejerciciosTema2.avanzado.ejercicio3.modelo.Marca;
 import ceu.dam.ad.ejerciciosTema2.avanzado.ejercicio3.modelo.Pais;
 import ceu.dam.ad.ejerciciosTema2.avanzado.ejercicio3.modelo.Tienda;
 import ceu.dam.ad.ejerciciosTema2.avanzado.ejercicio3.repository.ReposirotyMarca;
+import ceu.dam.ad.ejerciciosTema2.avanzado.ejercicio3.repository.RepositoryCentro;
 import ceu.dam.ad.ejerciciosTema2.avanzado.ejercicio3.repository.RepositoryPais;
+import ceu.dam.ad.ejerciciosTema2.avanzado.ejercicio3.repository.RepositoryTienda;
 
 @Service
 public class ComercialServiceImpl implements ComercialService {
@@ -20,6 +23,10 @@ public class ComercialServiceImpl implements ComercialService {
 	private RepositoryPais repoPais;
 	@Autowired
 	private ReposirotyMarca repoMarca;
+	@Autowired
+	RepositoryCentro repoCentro;
+	@Autowired
+	RepositoryTienda repoTienda;
 
 	@Override
 	public List<Pais> buscarPaises(String filtro) throws ComercialException {
@@ -45,24 +52,60 @@ public class ComercialServiceImpl implements ComercialService {
 
 	@Override
 	public void insertarCentroComercial(CentroComercial cc) throws ComercialException {
+
+		try {
+
+			repoCentro.save(cc);
+
+		} catch (DataAccessException e) {
+			throw new ComercialException(e);
+		}
 	}
 
 	@Override
 	public CentroComercial consultarCentroComercial(String uuidCentro) throws ComercialException, NotFoundException {
-		return null;
+
+		try {
+
+			UUID uuid = UUID.fromString(uuidCentro);
+			return repoCentro.findById(uuid).orElseThrow(() -> new NotFoundException("No existe"));
+
+		} catch (DataAccessException e) {
+			throw new ComercialException(e);
+		}
 	}
 
 	@Override
 	public Tienda consularTienda(Long idTienda) throws ComercialException, NotFoundException {
-		return null;
+
+		try {
+
+			return repoTienda.findById(idTienda).orElseThrow(() -> new NotFoundException("No existe"));
+
+		} catch (DataAccessException e) {
+			throw new ComercialException(e);
+		}
 	}
 
 	@Override
 	public void borrarTienda(Long idTienda) throws ComercialException {
+		try {
+			repoTienda.deleteById(idTienda);
+		} catch (DataAccessException e) {
+			throw new ComercialException(e);
+
+		}
 	}
 
 	@Override
 	public void borrarCentroComercial(String uuidCentro) throws ComercialException {
+		try {
+			UUID uuid = UUID.fromString(uuidCentro);
+			repoCentro.deleteById(uuid);
+		} catch (DataAccessException e) {
+			throw new ComercialException(e);
+
+		}
 	}
 
 }

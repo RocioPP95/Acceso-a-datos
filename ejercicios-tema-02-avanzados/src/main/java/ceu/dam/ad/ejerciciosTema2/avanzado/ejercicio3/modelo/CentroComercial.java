@@ -5,8 +5,10 @@ import java.util.UUID;
 
 import org.hibernate.annotations.JdbcTypeCode;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -29,13 +31,14 @@ public class CentroComercial {
 	private String nombre;
 
 	private String direccion;
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "cod_pais")
+
 	private Pais pais;
-	@OneToMany
-	@JoinColumn(name = "uuid_centro")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "uuid_centro", nullable = false)
 	private List<Tienda> tiendas;
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "centro_comercial_marcas", joinColumns = {
 			@JoinColumn(name = "uuid_centro") }, inverseJoinColumns = { @JoinColumn(name = "cod_marca") })
 	private List<Marca> marcas;
