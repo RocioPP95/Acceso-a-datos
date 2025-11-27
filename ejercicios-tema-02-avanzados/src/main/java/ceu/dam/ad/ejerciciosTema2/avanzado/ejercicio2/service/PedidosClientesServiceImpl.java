@@ -151,4 +151,11 @@ public class PedidosClientesServiceImpl implements PedidosClientesService {
 
 	}
 
+	@Override
+	public List<Pedido> consultarPedidosByArticulo(String descripcionArticulo)
+			throws PedidosClientesServiceException, NotFoundException {
+		List <Pedido>pedidos=pedidoRepo.findByLineasArticuloDescripcion(descripcionArticulo);
+		return null;
+	}
+
 }

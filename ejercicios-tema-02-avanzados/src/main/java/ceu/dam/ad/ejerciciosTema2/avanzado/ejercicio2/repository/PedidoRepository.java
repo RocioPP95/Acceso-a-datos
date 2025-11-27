@@ -1,5 +1,6 @@
 package ceu.dam.ad.ejerciciosTema2.avanzado.ejercicio2.repository;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,5 +11,7 @@ import ceu.dam.ad.ejerciciosTema2.avanzado.ejercicio2.model.Pedido;
 @Repository
 
 public interface PedidoRepository extends JpaRepository<Pedido,UUID > {
+
+	List<Pedido> findByLineasArticuloDescripcion(String descripcionArticulo);
 
 }

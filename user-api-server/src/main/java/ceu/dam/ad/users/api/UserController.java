@@ -20,6 +20,7 @@ import ceu.dam.ad.users.exception.UserNotFoundException;
 import ceu.dam.ad.users.exception.UserUnauthorizedException;
 import ceu.dam.ad.users.model.User;
 import ceu.dam.ad.users.service.UserServiceImpl;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 
 @RestController
@@ -55,6 +56,7 @@ public class UserController {
 //	
 //	
 	@PostMapping("/login")
+	@Operation(summary="Permite hacer login")
 	public LoginResponseDto login(@Valid @RequestBody LoginRequestDto request)
 			throws UserNotFoundException, UserUnauthorizedException, UserException {
 		User user = service.login(request.getLogin(), request.getPassword());

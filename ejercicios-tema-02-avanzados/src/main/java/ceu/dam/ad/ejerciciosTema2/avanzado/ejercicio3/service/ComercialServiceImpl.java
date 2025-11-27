@@ -88,6 +88,7 @@ public class ComercialServiceImpl implements ComercialService {
 	}
 
 	@Override
+	
 	public void borrarTienda(Long idTienda) throws ComercialException {
 		try {
 			repoTienda.deleteById(idTienda);

@@ -1,5 +1,6 @@
 package ceu.dam.ad.users.dto.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -8,10 +9,12 @@ import lombok.Data;
 public class LoginRequestDto {
 
 	@NotBlank(message = "el nombre es obligatorio")
-	@Size(max = 50, message = "el nombre tiene que tener menos de 50 caracteres")
+	@Schema(description = "Username o email con el que se hará loging")
+
 	private String login;
 	@NotBlank(message = "La password nueva no puede ser vacía")
-	@Size(min = 8, max = 50, message = "La password tiene que tener una contraseña entre 8 y 20 carácteres")
+	@Schema(description = "Password ren lcaro sin cifrar")
+
 	private String password;
 
 }
