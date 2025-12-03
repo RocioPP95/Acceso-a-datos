@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ApiSpringPostresApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ApiSpringPostresApplication.class, args);
+		SpringApplication.run(ApiSpringPostresApplication.class, args); 
 	}
 	
 	

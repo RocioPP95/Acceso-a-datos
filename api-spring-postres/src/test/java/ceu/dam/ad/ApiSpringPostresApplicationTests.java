@@ -8,6 +8,6 @@ class ApiSpringPostresApplicationTests {
 
 	@Test
 	void contextLoads() {
-	}
+	} 
 
 }

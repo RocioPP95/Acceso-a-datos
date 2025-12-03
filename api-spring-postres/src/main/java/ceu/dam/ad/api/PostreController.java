@@ -17,11 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 import ceu.dam.ad.dto.PostreRequest;
 import ceu.dam.ad.dto.PostreResponse;
 import ceu.dam.ad.model.Postre;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
-@RequestMapping("/usuarios")
+@RequestMapping("/postre")
+@SecurityRequirement(name="Authorization")
 public class PostreController {
-	
+	 
 	
 
 	@GetMapping("/{id}")
