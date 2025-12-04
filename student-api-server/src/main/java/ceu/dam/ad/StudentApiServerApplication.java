@@ -13,6 +13,6 @@ public class StudentApiServerApplication {
 		ConfigurableApplicationContext context = SpringApplication.run(StudentApiServerApplication.class, args);
 		Test test = context.getBean(Test.class);
 		test.test();
-	}
+	} 
 
 }

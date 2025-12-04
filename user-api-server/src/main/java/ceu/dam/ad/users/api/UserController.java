@@ -21,6 +21,7 @@ import ceu.dam.ad.users.exception.UserUnauthorizedException;
 import ceu.dam.ad.users.model.User;
 import ceu.dam.ad.users.service.UserServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 
 @RestController
@@ -50,7 +51,7 @@ public class UserController {
 
 //	@PostMapping("")    
 //	public User login(@RequestParam String login, @RequestParam String password)
-//	        throws UserNotFoundException, UserUnauthorizedException, UserException {
+//	        throws UserNotFoundException UserUnauthorizedException, UserException {
 //	    return service.login(login, password);
 //	}
 //	

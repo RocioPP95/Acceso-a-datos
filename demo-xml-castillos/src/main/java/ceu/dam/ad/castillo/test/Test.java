@@ -13,17 +13,23 @@ import ceu.dam.ad.castillo.service.CastilloXmlServiceImpl;
 public class Test {
 
 	public static void main(String[] args) {
-		Castillo castillo = createCastillo();
+
 		CastilloXmlService service = new CastilloXmlServiceImpl();
+//		try {
+//
+//			// Castillo castillo = createCastillo();
+//			service.exportCastilloToXml("c:/temporal/castillo.xml", castillo);
+//		} catch (CastilloXmlException e) {
+//			e.printStackTrace();
+//		}
+
 		try {
-			service.exportCastilloToXml("c:/temporal/castillo.xml", castillo);
+			Castillo castillo = service.importtCastilloToXml("c/temporal/castillo.xml");
 		} catch (CastilloXmlException e) {
 			e.printStackTrace();
 		}
-		
-		
 	}
-	
+
 	public static Castillo createCastillo() {
 		Castillo castillo = new Castillo();
 
@@ -55,7 +61,6 @@ public class Test {
 
 		castillo.setCaballeros(caballeros);
 
-
 		// --- Lista de dragones ---
 		List<Dragon> dragones = new ArrayList<>();
 
@@ -84,10 +89,9 @@ public class Test {
 
 		castillo.setDragones(dragones);
 
-
 		// --- Otros atributos del castillo ---
 		castillo.setFoso(true);
-		
+
 		return castillo;
 	}
 

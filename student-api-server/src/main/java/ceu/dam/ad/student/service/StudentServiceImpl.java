@@ -11,7 +11,7 @@ import org.springframework.data.domain.ExampleMatcher.StringMatcher;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import ceu.dam.ad.student.dto.request.FilterDto;
+import ceu.dam.ad.student.api.request.FilterDto;
 import ceu.dam.ad.student.exception.StudentDuplicateException;
 import ceu.dam.ad.student.exception.StudentNotFoundException;
 import ceu.dam.ad.student.model.Student;

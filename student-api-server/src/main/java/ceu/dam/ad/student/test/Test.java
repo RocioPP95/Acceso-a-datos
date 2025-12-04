@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ceu.dam.ad.student.dto.request.FilterDto;
+import ceu.dam.ad.student.api.request.FilterDto;
 import ceu.dam.ad.student.exception.StudentDuplicateException;
 import ceu.dam.ad.student.exception.StudentNotFoundException;
 import ceu.dam.ad.student.model.Student;
@@ -32,7 +32,7 @@ public class Test {
 
 		Student s2 = Student.builder()
 		        .dni("18765432B")
-		        .firstName("Laura")
+		        .firstName("Laura") 
 		        .lastName("Martínez")
 		        .email("laura.martinez@example.com")
 		        .dateOfBirth(LocalDate.of(2000, 11, 3)) // 25 años

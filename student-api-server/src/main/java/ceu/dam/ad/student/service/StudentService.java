@@ -2,7 +2,7 @@ package ceu.dam.ad.student.service;
 
 import java.util.List;
 
-import ceu.dam.ad.student.dto.request.FilterDto;
+import ceu.dam.ad.student.api.request.FilterDto;
 import ceu.dam.ad.student.exception.StudentDuplicateException;
 import ceu.dam.ad.student.exception.StudentNotFoundException;
 import ceu.dam.ad.student.model.Student;

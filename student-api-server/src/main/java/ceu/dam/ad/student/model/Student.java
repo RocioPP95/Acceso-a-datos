@@ -2,6 +2,7 @@ package ceu.dam.ad.student.model;
 
 import java.time.LocalDate;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,6 +24,7 @@ public class Student {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Schema(description="ID del estudiante.Autogenerado en peticiones POST")
 	private Long id;
 	private String dni;
 	private String firstName;
